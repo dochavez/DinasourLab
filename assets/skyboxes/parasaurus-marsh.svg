@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 800">
+  <defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#7796a0"/><stop offset=".56" stop-color="#d8c888"/><stop offset="1" stop-color="#476a52"/></linearGradient><linearGradient id="water" x2="1" y2="1"><stop stop-color="#9abfc0"/><stop offset="1" stop-color="#3d6e72"/></linearGradient></defs>
+  <rect width="1600" height="800" fill="url(#sky)"/><path d="M0 415 194 342l133 85 150-129 173 133 171-98 168 91 178-111 153 103 156-68 164 102v166H0z" fill="#708260"/>
+  <path d="M0 498c247-65 403 34 622-9 305-61 496 23 978-37v348H0z" fill="#547e5a"/>
+  <path d="M0 675c261-80 338 40 600-25 267-67 420 62 1000-51v201H0z" fill="url(#water)"/>
+  <g fill="#275541"><path d="M89 692c8-155 27-187 46 0h-15l-9-89-8 89zM170 715c8-137 25-166 42 0h-14l-8-78-7 78zM1448 710c8-147 26-179 45 0h-15l-9-83-8 83zM1345 699c8-138 25-167 42 0h-14l-8-78-7 78z"/></g>
+</svg>

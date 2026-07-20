@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#122d24" />
+    <title>DinosaurLab · Spinosaurus</title>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="grain"></div>
+    <div class="app-shell">
+      <aside class="rail" aria-label="Main navigation">
+        <a class="rail-logo" href="#inicio" aria-label="DinosaurLab home"><span>DL</span></a>
+        <nav>
+          <a class="rail-link active" href="#inicio"><span class="rail-icon">⌂</span><small>Home</small></a>
+          <a class="rail-link" href="#explorar"><span class="rail-icon">◉</span><small>Explore</small></a>
+          <a class="rail-link" href="#registro"><span class="rail-icon">✎</span><small>Notes</small></a>
+          <a class="rail-link" href="#museos"><span class="rail-icon">⌖</span><small>Museums</small></a>
+        </nav>
+      </aside>
+
+      <aside class="collection-panel" id="explorar">
+        <div class="brand">
+          <div class="brand-mark">✦</div>
+          <div><strong>Dinosaur<span>Lab</span></strong><em>Explore. Learn. Protect.</em></div>
+        </div>
+        <div class="collection-heading"><span>COLLECTION</span><button aria-label="Filter collection">☷</button></div>
+        <div class="species-list">
+          <button class="species-card selected" data-specimen="spinosaurus" aria-pressed="true"><span class="species-thumb spino"><svg class="species-silhouette" viewBox="0 0 100 60" aria-hidden="true"><path d="M5 39c9-2 16-8 23-16l4-10 5 11 5-15 5 16 5-13 5 14 7 2 3-17 5 17 10 5 7 2-7 5-5 11-4-11-10-3-8 5-8 10-3-10-9-2-6 12-3-12-10 2-8 8 3-10-8-5z"/></svg></span><span><b>Spinosaurus</b><small>Cretaceous Period</small></span><i>›</i></button>
+          <button class="species-card" data-specimen="tyrannosaurus" aria-pressed="false"><span class="species-thumb rex"><svg class="species-silhouette" viewBox="0 0 100 60" aria-hidden="true"><path d="M7 37l16-5 12-15 18-7 18 2 9 7 13 2-8 7-12 2-4 12-5-1 1-10-10-2-5 17-5-1 1-16-11 3-4 11-5-1 1-9-8 2-7 7 2-8-9-1z"/></svg></span><span><b>Tyrannosaurus</b><small>Cretaceous Period</small></span><i>›</i></button>
+          <button class="species-card" data-specimen="triceratops" aria-pressed="false"><span class="species-thumb trike"><svg class="species-silhouette" viewBox="0 0 100 60" aria-hidden="true"><path d="M5 35l11-6 4-13 6 10 8-9 8 8 21 3 9 10 16 3-10 5-12-2-4 12-5-1 1-11-15-1-6 12-5-1 1-11-11-2-4 9-5-1 2-9-9-4z"/><path d="M20 22l-7-12 12 10M25 21l2-14 4 15"/></svg></span><span><b>Triceratops</b><small>Cretaceous Period</small></span><i>›</i></button>
+          <button class="species-card" data-specimen="parasaurus" aria-pressed="false"><span class="species-thumb parasaurus"><svg class="species-silhouette" viewBox="0 0 100 60" aria-hidden="true"><path d="M7 39l15-5 11-14 2-13 6 9 9 5 19 3 9 9 15 3-9 5-12-2-5 12-5-1 2-11-15-1-6 12-5-1 2-11-13-2-5 10-5-1 3-10-10 2-8 8 3-10-9-1z"/><path d="M34 19c-2-9 1-14 11-16-4 6-5 11-1 17z"/></svg></span><span><b>Parasaurus</b><small>Cretaceous Period</small></span><i>›</i></button>
+          <button class="species-card" data-specimen="pteranodon" aria-pressed="false"><span class="species-thumb pteranodon"><svg class="species-silhouette" viewBox="0 0 100 60" aria-hidden="true"><path d="M2 28l37-10 13-13 7 12 39 12-35 3-8 13-6-13-21-3-19 10 14-15z"/><path d="M50 20l8 16-5 14-4-15-8-5z"/></svg></span><span><b>Pteranodon</b><small>Late Cretaceous</small></span><i>›</i></button>
+          <button class="species-card" data-specimen="brachiosaurus" aria-pressed="false"><span class="species-thumb brachiosaurus"><svg class="species-silhouette" viewBox="0 0 100 60" aria-hidden="true"><path d="M8 41l20-8 4-23 8-7 4 7-4 22 24 2 7-15 10-11 7 3-9 11-2 17 16 5-9 5-12-4-4 14-5-1 2-14-24-1-5 14-5-1 2-14-10 3-8 8 3-10z"/></svg></span><span><b>Brachiosaurus</b><small>Late Jurassic</small></span><i>›</i></button>
+          <button class="species-card" data-specimen="ankylosaurus" aria-pressed="false"><span class="species-thumb ankylosaurus"><svg class="species-silhouette" viewBox="0 0 100 60" aria-hidden="true"><path d="M5 39l12-8 12-12 30-2 14 8 17-1-9 8-13 2-4 13-6-1 2-12-18-2-5 13-6-1 2-12-13 1-9 8 2-9-8-1z"/><path d="M28 18l5-8 5 8 6-9 5 9 7-8 4 10"/></svg></span><span><b>Ankylosaurus</b><small>Late Cretaceous</small></span><i>›</i></button>
+          <button class="species-card" data-specimen="mammoth" aria-pressed="false"><span class="species-thumb mammoth"><svg class="species-silhouette" viewBox="0 0 100 60" aria-hidden="true"><path d="M8 39l14-7 8-15 29-3 16 8 8 14-6 12-6-1 1-12-12-2-2 14-6-1 1-14-16 1-3 14-6-1 2-13-12 2-7 8 2-10-7-3z"/><path d="M77 31c8 1 12 6 8 14-3-6-7-8-12-8M77 34c5 2 6 6 4 10"/></svg></span><span><b>Woolly Mammoth</b><small>Pleistocene Epoch</small></span><i>›</i></button>
+          <button class="species-card"><span class="species-thumb raptor"><svg class="species-silhouette" viewBox="0 0 100 60" aria-hidden="true"><path d="M6 40l17-5 11-15 14-7 13 3 7 6 17 2-8 6-12 1-4 13-5-1 1-12-9-2-4 18-5-1 1-17-10 3-5 12-5-1 2-11-8 2-8 8 3-10-9-1z"/></svg></span><span><b>Velociraptor</b><small>Cretaceous Period</small></span><i>›</i></button>
+        </div>
+        <article class="discovery-card" id="registro">
+          <span class="leaf">✣</span>
+          <div><i>Discovery of the day</i><p>The Spinosaurus’ dorsal sail could rise more than 1.6 m high.</p></div>
+        </article>
+      </aside>
+
+      <main id="inicio">
+        <header class="topbar">
+          <a href="#explorar" class="back-link">← Back to collection</a>
+          <div class="specimen-label"><span id="specimenNumber">SPECIMEN 01</span><strong id="specimenName">SPINOSAURUS</strong><em id="specimenLatin">Spinosaurus aegyptiacus</em></div>
+          <div class="top-actions"><button title="Notebook">✎<small>Notebook</small></button><button title="Compare">⌘<small>Compare</small></button><button title="Share">⌯<small>Share</small></button></div>
+        </header>
+
+        <section class="viewer-section" aria-label="Spinosaurus 3D viewer">
+          <div class="viewer-bg-orb orb-one"></div><div class="viewer-bg-orb orb-two"></div>
+          <div id="modelViewer" aria-label="Rotatable 3D Spinosaurus model"></div>
+          <div class="viewer-hint" id="viewerHint"><span>↔</span> Drag to explore in 360°</div>
+          <div class="loading-state" id="loadingState"><div class="fossil-loader">✦</div><b>Loading specimen</b><span id="loadingProgress">Preparing the laboratory…</span><span class="file-protocol-help" id="fileProtocolHelp" hidden>Open <b>Iniciar-DinosaurLab.bat</b> to load the model.</span></div>
+          <div class="puzzle-hud" id="puzzleHud" hidden>
+            <div class="puzzle-timer" id="puzzleTimer" aria-live="polite"><span>TIME LEFT</span><strong id="puzzleTimerValue">02:30</strong></div>
+            <div class="puzzle-assembly-progress" id="puzzleAssemblyProgress" role="progressbar" aria-label="Assembly progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+              <div class="puzzle-progress-label"><span>ASSEMBLY PROGRESS</span><strong id="puzzleProgressValue">0 / 0</strong></div>
+              <div class="puzzle-progress-track"><span id="puzzleProgressBar"></span></div>
+            </div>
+          </div>
+          <div class="puzzle-dialog" id="puzzleDialog" hidden role="dialog" aria-modal="true" aria-labelledby="puzzleDialogTitle">
+            <div class="puzzle-dialog-card">
+              <span class="puzzle-dialog-icon" id="puzzleDialogIcon">🧩</span>
+              <h2 id="puzzleDialogTitle">Ready to assemble?</h2>
+              <p id="puzzleDialogCopy">Drag each floating dinosaur piece to its matching translucent silhouette. You have 2 minutes and 30 seconds.</p>
+              <button id="puzzleContinue" type="button">Continue</button>
+              <button id="puzzleRetry" type="button" hidden>Try Again</button>
+            </div>
+          </div>
+          <div class="puzzle-celebration" id="puzzleCelebration" hidden aria-live="polite" aria-label="Assembly complete celebration">
+            <div class="celebration-message">🎉 <strong>Assembly complete!</strong><span>Excellent work, paleontologist.</span></div>
+            <div class="celebration-particles" id="celebrationParticles"></div>
+          </div>
+          <div class="view-tools">
+            <button class="tool active" title="3D view">⬡<span>3D</span></button>
+            <button class="tool" id="focusModel" title="Focus specimen">⌗<span>Focus</span></button>
+            <button class="tool" id="toggleGrid" title="Show grid">⌁<span>Scale</span></button>
+          </div>
+          <div class="viewer-controls">
+            <button id="resetView" title="Reset view">↻</button>
+            <span class="pill">360°</span>
+            <input id="modelScale" type="range" min="75" max="125" value="100" aria-label="Model size" />
+            <button id="fullscreenViewer" title="Full screen">⛶</button>
+          </div>
+        </section>
+
+        <section class="timeline-section" aria-label="Geological timeline">
+          <div class="timeline-title"><span>WHEN IT LIVED</span><strong id="timelineAge">99–93 million years ago</strong></div>
+          <div class="timeline"><div class="era"><b>TRIASSIC</b><span>252 Ma</span></div><div class="era"><b>JURASSIC</b><span>201 Ma</span></div><div class="era active-era"><i></i><b>CRETACEOUS</b><span>145–66 Ma</span></div><div class="era"><b>TODAY</b><span>0 Ma</span></div></div>
+          <p id="timelineCopy">Spinosaurus moved through wetlands and river systems of North Africa during the Late Cretaceous.</p>
+        </section>
+      </main>
+
+      <aside class="detail-panel" id="museos">
+        <span class="badge" id="familyBadge">SPINOSAURIDAE FAMILY</span>
+        <h1 id="detailName">Spinosaurus</h1><em class="latin" id="detailLatin">Spinosaurus aegyptiacus</em>
+        <div class="tags" id="speciesTags"><span>Theropod</span><span>Piscivore</span><span>Semi-aquatic</span><span>Cretaceous</span></div>
+        <div class="details-rule"></div>
+        <div class="model-switcher">
+          <p>MODEL EXPLORER</p>
+          <div class="model-buttons"><button class="model-choice active" data-model="skin">Textured model</button><button class="model-choice" data-model="bones">Skeletal structure</button></div>
+          <label class="overlay-toggle" id="overlayRow"><input id="boneOverlay" type="checkbox" /><span class="toggle-track"></span><span>Overlay skeletal structure</span></label>
+          <div class="puzzle-controls" id="puzzleControls" hidden>
+            <button id="startPuzzle" type="button">Assemble model</button>
+            <button id="exitPuzzle" type="button" hidden>Exit assembly</button>
+            <span id="puzzleProgress">Pieces to place</span>
+          </div>
+          <div class="adjustment-panel">
+            <div class="adjustment-title"><span>LIGHT DIRECTION</span><output id="lightReadout">45° / 45°</output></div>
+            <label class="slider-control">Around model <input id="lightAzimuth" type="range" min="0" max="360" value="45" /></label>
+            <label class="slider-control">Height <input id="lightElevation" type="range" min="8" max="85" value="45" /></label>
+            <div class="adjustment-title axis-title"><span>AXIS SCALE</span><output id="scaleReadout">100% · 100% · 100%</output></div>
+            <div class="axis-controls">
+              <label>X <input id="scaleX" type="range" min="50" max="150" value="100" /></label>
+              <label>Y <input id="scaleY" type="range" min="50" max="150" value="100" /></label>
+              <label>Z <input id="scaleZ" type="range" min="50" max="150" value="100" /></label>
+            </div>
+          </div>
+        </div>
+        <section class="fact"><span class="fact-icon">◒</span><div><h2>Diet</h2><p id="dietCopy">An opportunistic carnivore. Its long snout and conical teeth were especially well suited to catching fish.</p></div></section>
+        <section class="fact"><span class="fact-icon">↕</span><div><h2>Size</h2><p id="sizeCopy">Up to 15 m long: roughly the length of a city bus. Its dorsal sail stood taller than an adult person.</p></div></section>
+        <section class="fact"><span class="fact-icon">⌖</span><div><h2>Discovery</h2><p id="discoveryCopy">The first remains were found in 1912 in Egypt’s Bahariya Oasis by Richard Markgraf.</p></div></section>
+        <section class="fact"><span class="fact-icon">⌂</span><div><h2>Visit</h2><p id="visitCopy">Chicago’s Field Museum displays “Sobek,” a full-scale reconstruction inspired by fossils from the Sahara.</p><a id="visitLink" href="https://www.fieldmuseum.org/exhibition/halls-and-galleries/spinosaurus" target="_blank" rel="noreferrer">Plan your visit ↗</a></div></section>
+        <article class="field-card"><div><span>FIELD NOTES</span><b>A giant of ancient African rivers.</b></div><span class="field-skull">♜</span></article>
+      </aside>
+    </div>
+
+    <section class="welcome-modal" id="welcomeModal" aria-modal="true" role="dialog" aria-labelledby="welcomeTitle">
+      <div class="welcome-card"><div class="welcome-sun"></div><div class="bones bones-a">☄</div><div class="bones bones-b">✦</div><p class="eyebrow">WELCOME TO</p><h2 id="welcomeTitle">Dinosaur<span>Lab</span></h2><p class="welcome-copy">Your expedition into the past begins here. Explore Spinosaurus, rotate its model, and discover its anatomy.</p><button id="enterLab">Enter the laboratory <span>→</span></button><small>Explore the anatomy of a Cretaceous giant</small></div>
+    </section>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.166.1/build/three.module.js"
+        }
+      }
+    </script>
+    <script src="welcome.js"></script>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
