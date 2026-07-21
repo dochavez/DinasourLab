@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.166.1/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.166.1/examples/jsm/loaders/GLTFLoader.js';
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.0/+esm';
 
 const viewer = document.querySelector('#modelViewer');
 const viewerSection = document.querySelector('.viewer-section');
@@ -38,6 +39,20 @@ const mobileMenuToggle = document.querySelector('#mobileMenuToggle');
 const collectionBackdrop = document.querySelector('#collectionBackdrop');
 const shareStatus = document.querySelector('#shareStatus');
 const shareMessage = 'Hey, I visited the DinasourLab and completed the puzzles';
+const playerAccountButton = document.querySelector('#playerAccountButton');
+const leaderboardFilter = document.querySelector('#leaderboardFilter');
+const leaderboardList = document.querySelector('#leaderboardList');
+const activePlayers = document.querySelector('#activePlayers');
+const leaderboardRefresh = document.querySelector('#leaderboardRefresh');
+const authModal = document.querySelector('#authModal');
+const authForm = document.querySelector('#authForm');
+const authClose = document.querySelector('#authClose');
+const authDisplayName = document.querySelector('#authDisplayName');
+const authEmail = document.querySelector('#authEmail');
+const authPassword = document.querySelector('#authPassword');
+const authMessage = document.querySelector('#authMessage');
+const authSignUp = document.querySelector('#authSignUp');
+const supabase = createClient(window.DINOSAURLAB_SUPABASE.url, window.DINOSAURLAB_SUPABASE.publishableKey);
 
 const scene = new THREE.Scene();
 scene.fog = new THREE.FogExp2(0xf2eee2, 0.017);
@@ -92,6 +107,10 @@ let puzzleSpecimen = null;
 let puzzleChallengeRunning = false;
 let puzzleTimerInterval = null;
 let puzzleDeadline = 0;
+let currentUser = null;
+let currentDisplayName = '';
+let currentPuzzleRunId = null;
+let startPuzzleAfterAuth = false;
 const puzzleGroup = new THREE.Group();
 puzzleGroup.visible = false;
 scene.add(puzzleGroup);
@@ -362,6 +381,89 @@ function formatPuzzleTime(seconds) {
   return `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
 }
 
+function formatLeaderboardTime(seconds) {
+  return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
+}
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[character]));
+}
+
+function setAuthMessage(message = '') { authMessage.textContent = message; }
+
+function openAuthModal(message = 'Sign in to start a recorded puzzle run.') {
+  setAuthMessage(message);
+  authModal.hidden = false;
+  authModal.querySelector('#authTitle').textContent = currentUser ? 'Set your player name' : 'Join the leaderboard';
+  if (currentDisplayName) authDisplayName.value = currentDisplayName;
+}
+
+function closeAuthModal() { authModal.hidden = true; setAuthMessage(''); }
+
+async function refreshCurrentProfile() {
+  if (!currentUser) { currentDisplayName = ''; return; }
+  const { data } = await supabase.from('profiles').select('display_name').eq('id', currentUser.id).maybeSingle();
+  currentDisplayName = data?.display_name || '';
+  if (currentDisplayName) authDisplayName.value = currentDisplayName;
+}
+
+function renderAccountButton() {
+  playerAccountButton.textContent = currentUser
+    ? (currentDisplayName ? `Player: ${currentDisplayName}` : 'Set player name')
+    : 'Sign in to play';
+}
+
+async function loadLeaderboard() {
+  if (!currentUser) {
+    leaderboardList.innerHTML = '<li class="leaderboard-empty">Sign in to view the fastest puzzle completions.</li>';
+    activePlayers.innerHTML = '<li>Sign in to see active players.</li>';
+    return;
+  }
+  const dinosaurId = leaderboardFilter.value === 'current' ? currentSpecimen : null;
+  let scoresQuery = supabase.from('puzzle_runs').select('dinosaur_id, completion_seconds, completed_at, profiles(display_name)').eq('status', 'completed').order('completion_seconds', { ascending: true }).order('completed_at', { ascending: true }).limit(10);
+  if (dinosaurId) scoresQuery = scoresQuery.eq('dinosaur_id', dinosaurId);
+  const activeAfter = new Date(Date.now() - 10 * 60 * 1000).toISOString();
+  const activeQuery = supabase.from('puzzle_runs').select('dinosaur_id, started_at, profiles(display_name)').eq('status', 'playing').gte('started_at', activeAfter).order('started_at', { ascending: false }).limit(8);
+  const [{ data: scores, error: scoreError }, { data: players, error: playerError }] = await Promise.all([scoresQuery, activeQuery]);
+  if (scoreError || playerError) {
+    leaderboardList.innerHTML = '<li class="leaderboard-empty">Leaderboard is temporarily unavailable.</li>';
+    activePlayers.innerHTML = '<li>Unable to load active players.</li>';
+    return;
+  }
+  leaderboardList.innerHTML = scores?.length ? scores.map((score, index) => `<li><b>${index + 1}</b><span>${escapeHtml(score.profiles?.display_name || 'Explorer')}<small>${escapeHtml(score.dinosaur_id)}</small></span><strong>${formatLeaderboardTime(score.completion_seconds)}</strong></li>`).join('') : '<li class="leaderboard-empty">No completed runs yet. Be the first!</li>';
+  activePlayers.innerHTML = players?.length ? players.map((player) => `<li><span>${escapeHtml(player.profiles?.display_name || 'Explorer')}</span><small>${escapeHtml(player.dinosaur_id)}</small></li>`).join('') : '<li>No active puzzle runs right now.</li>';
+}
+
+async function startServerPuzzleRun() {
+  if (!currentUser) { startPuzzleAfterAuth = true; openAuthModal(); return false; }
+  const displayName = authDisplayName.value.trim().replace(/\s+/g, ' ');
+  if (displayName.length < 2 || displayName.length > 24) { openAuthModal('Choose a public nickname between 2 and 24 characters before continuing.'); return false; }
+  const { data, error } = await supabase.functions.invoke('puzzle-score', { body: { action: 'start', dinosaur_id: currentSpecimen, display_name: displayName } });
+  if (error || !data?.run?.id) { openAuthModal(error?.message || data?.error || 'Unable to start a scored puzzle run.'); return false; }
+  currentPuzzleRunId = data.run.id;
+  currentDisplayName = displayName;
+  renderAccountButton();
+  return true;
+}
+
+async function expireServerPuzzleRun() {
+  const runId = currentPuzzleRunId;
+  currentPuzzleRunId = null;
+  if (!runId || !currentUser) return;
+  await supabase.functions.invoke('puzzle-score', { body: { action: 'expire', run_id: runId } });
+  loadLeaderboard();
+}
+
+async function completeServerPuzzleRun() {
+  const runId = currentPuzzleRunId;
+  currentPuzzleRunId = null;
+  if (!runId || !currentUser) return;
+  const { data, error } = await supabase.functions.invoke('puzzle-score', { body: { action: 'complete', run_id: runId } });
+  if (error || data?.error) { puzzleProgress.textContent = data?.error || 'Puzzle complete — score could not be saved.'; }
+  else if (data?.run?.completion_seconds) { puzzleProgress.textContent = `Score saved: ${formatLeaderboardTime(data.run.completion_seconds)}`; }
+  loadLeaderboard();
+}
+
 function clearPuzzleTimer() {
   if (puzzleTimerInterval) clearInterval(puzzleTimerInterval);
   puzzleTimerInterval = null;
@@ -395,8 +497,9 @@ function showPuzzleInstructions() {
   });
 }
 
-function beginPuzzleChallenge() {
+async function beginPuzzleChallenge() {
   if (!puzzleActive) return;
+  if (!(await startServerPuzzleRun())) return;
   puzzleDialog.hidden = true;
   puzzleCelebration.hidden = true;
   clearPuzzleTimer();
@@ -437,6 +540,7 @@ function completePuzzle() {
   clearPuzzleTimer();
   createCelebrationParticles();
   puzzleCelebration.hidden = false;
+  void completeServerPuzzleRun();
   setTimeout(() => { puzzleCelebration.hidden = true; }, 6500);
 }
 
@@ -445,6 +549,7 @@ function puzzleTimeUp() {
   clearPuzzleTimer();
   selectedPiece = null;
   controls.enabled = true;
+  void expireServerPuzzleRun();
   puzzleHud.hidden = false;
   showPuzzleDialog({
     icon: '⏳',
@@ -544,6 +649,7 @@ function exitPuzzle() {
   overlayRow.classList.toggle('disabled', activeModel !== 'skin');
   startPuzzleButton.hidden = false;
   exitPuzzleButton.hidden = true;
+  void expireServerPuzzleRun();
   if (assets[activeModel]) frameModel(assets[activeModel]);
 }
 
@@ -551,6 +657,7 @@ function startPuzzle() {
   const specimenId = currentSpecimen;
   const specimen = specimens[specimenId];
   if (!specimen?.puzzle) return;
+  if (!currentUser) { startPuzzleAfterAuth = true; openAuthModal('Sign in before opening a puzzle so your completion can be recorded.'); return; }
   const activate = () => {
     puzzleActive = true;
     puzzleGroup.visible = true;
@@ -751,6 +858,35 @@ function shareDinosaurLab(channel) {
   if (channel === 'instagram') popup('https://www.instagram.com/');
 }
 document.querySelectorAll('[data-share]').forEach((button) => button.addEventListener('click', () => shareDinosaurLab(button.dataset.share)));
+playerAccountButton.addEventListener('click', async () => {
+  if (!currentUser) { openAuthModal(); return; }
+  if (!currentDisplayName) { openAuthModal('Choose a public player name to join the leaderboard.'); return; }
+  await supabase.auth.signOut();
+});
+leaderboardFilter.addEventListener('change', loadLeaderboard);
+leaderboardRefresh.addEventListener('click', loadLeaderboard);
+authClose.addEventListener('click', closeAuthModal);
+authForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  setAuthMessage('Signing in…');
+  const { error } = await supabase.auth.signInWithPassword({ email: authEmail.value.trim(), password: authPassword.value });
+  if (error) { setAuthMessage(error.message); return; }
+  closeAuthModal();
+});
+authSignUp.addEventListener('click', async () => {
+  setAuthMessage('Creating account…');
+  const { error } = await supabase.auth.signUp({ email: authEmail.value.trim(), password: authPassword.value, options: { emailRedirectTo: window.location.origin } });
+  setAuthMessage(error ? error.message : 'Account created. Check your email to confirm it, then sign in.');
+});
+supabase.auth.onAuthStateChange((_event, session) => {
+  currentUser = session?.user || null;
+  queueMicrotask(async () => {
+    await refreshCurrentProfile();
+    renderAccountButton();
+    await loadLeaderboard();
+    if (currentUser && startPuzzleAfterAuth) { startPuzzleAfterAuth = false; startPuzzle(); }
+  });
+});
 overlayToggle.addEventListener('change', () => setModel(activeModel));
 scaleControl.addEventListener('input', applyModelScale);
 axisScaleControls.forEach((control) => control.addEventListener('input', applyModelScale));
@@ -779,6 +915,12 @@ function animate() {
   renderer.render(scene, camera);
 }
 animate();
+
+supabase.auth.getSession().then(({ data: { session } }) => {
+  currentUser = session?.user || null;
+  refreshCurrentProfile().then(() => { renderAccountButton(); loadLeaderboard(); });
+});
+setInterval(loadLeaderboard, 30000);
 
 window.__consoleErrors = [];
 window.addEventListener('error', (event) => window.__consoleErrors.push(event.message));

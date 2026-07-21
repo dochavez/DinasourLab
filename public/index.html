@@ -116,6 +116,13 @@
             <button id="exitPuzzle" type="button" hidden>Exit assembly</button>
             <span id="puzzleProgress">Pieces to place</span>
           </div>
+          <section class="leaderboard-panel" id="leaderboardPanel" aria-label="Puzzle leaderboard">
+            <div class="leaderboard-heading"><span>PUZZLE LEADERBOARD</span><button id="leaderboardRefresh" type="button" title="Refresh leaderboard">↻</button></div>
+            <button class="player-account-button" id="playerAccountButton" type="button">Sign in to play</button>
+            <label class="leaderboard-filter">Leaderboard <select id="leaderboardFilter"><option value="all">All dinosaurs</option><option value="current">Current dinosaur</option></select></label>
+            <ol class="leaderboard-list" id="leaderboardList"><li class="leaderboard-empty">Sign in to view the fastest puzzle completions.</li></ol>
+            <div class="active-players"><span>PLAYING NOW</span><ul id="activePlayers"><li>Sign in to see active players.</li></ul></div>
+          </section>
           <div class="adjustment-panel">
             <div class="adjustment-title"><span>LIGHT DIRECTION</span><output id="lightReadout">45° / 45°</output></div>
             <label class="slider-control">Around model <input id="lightAzimuth" type="range" min="0" max="360" value="45" /></label>
@@ -139,6 +146,18 @@
     <section class="welcome-modal" id="welcomeModal" aria-modal="true" role="dialog" aria-labelledby="welcomeTitle">
       <div class="welcome-card"><div class="welcome-sun"></div><div class="bones bones-a">☄</div><div class="bones bones-b">✦</div><p class="eyebrow">WELCOME TO</p><h2 id="welcomeTitle">Dinosaur<span>Lab</span></h2><p class="welcome-copy">Explore different dinosaurs, discover their anatomy, rotate them 360 degrees, view them in full screen, and play the puzzle game.</p><button id="enterLab">Enter the laboratory <span>→</span></button><small>Explore the anatomy of a Cretaceous giant</small></div>
     </section>
+    <section class="auth-modal" id="authModal" hidden aria-modal="true" role="dialog" aria-labelledby="authTitle">
+      <form class="auth-card" id="authForm">
+        <button class="auth-close" id="authClose" type="button" aria-label="Close sign in">×</button>
+        <p class="eyebrow">PUZZLE PLAYER</p><h2 id="authTitle">Join the leaderboard</h2>
+        <p>Sign in to record a server-timed puzzle score and see other players.</p>
+        <label>Public nickname<input id="authDisplayName" type="text" minlength="2" maxlength="24" autocomplete="nickname" placeholder="PaleoExplorer" /></label>
+        <label>Email<input id="authEmail" type="email" autocomplete="email" required placeholder="you@example.com" /></label>
+        <label>Password<input id="authPassword" type="password" autocomplete="current-password" required minlength="6" placeholder="At least 6 characters" /></label>
+        <p class="auth-message" id="authMessage" aria-live="polite"></p>
+        <div class="auth-actions"><button id="authSignIn" type="submit">Sign in</button><button id="authSignUp" type="button">Create account</button></div>
+      </form>
+    </section>
     <script type="importmap">
       {
         "imports": {
@@ -146,6 +165,7 @@
         }
       }
     </script>
+    <script src="supabase-config.js"></script>
     <script src="welcome.js"></script>
     <script type="module" src="app.js"></script>
   </body>
