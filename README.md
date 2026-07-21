@@ -109,11 +109,15 @@ Then open `http://localhost:4173`. The server is necessary for the browser to lo
 
 ## Controls
 
-- Drag the specimen to rotate it and use the wheel to zoom in or out.
+- Click anywhere on the 3D model to rotate it..
 
 - Switch between **Textured Model** and **Skeleton Structure**.
 
 - In the textured model, enable **Overlay Skeleton Structure** to see both at the same time.
+  
+- When you're in puzzle mode, you should rotate the reference model to check if the piece is in place; sometimes the perspective can deceive you and make you believe it's already been put in.
+
+- 
 
 ## The following information is for statistical purposes, generated and obtained directly by Codex.
 
