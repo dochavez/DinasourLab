@@ -12,9 +12,18 @@ Therefore, the first step was to create a ChatGPT prompt on the website that say
 
 <img width="1049" height="585" alt="image" src="https://github.com/user-attachments/assets/d13eff42-fd1e-4ee0-836b-53e6962f79ed" />
 
+Next, I asked ChatGTP5.6 to create reference images of dinosaurs to start brainstorming where they would be placed within the web application. For example, the results it generated were as follows:
+
+<img width="1030" height="690" alt="image" src="https://github.com/user-attachments/assets/b76607f8-e427-407e-9244-f410052503fa" />
+
 After installing Codex, the first prompt I asked was: `We're going to create an interactive website called DinasourLab. The structure of this interactive site is as shown in the image DinasourLab.png. Replace all the content in the image with dinosaur-related content. Then add an option that says "Skeletal Structure," and the 3D model SpinoFossil1.glb will load. The view for the 3D model should be 360 ​​degrees so the user can rotate it. Also, add an option so that when the user wants to see the skeleton's skeletal structure, it appears overlaid on the textured 3D model. Add a dinosaur-themed welcome window and background sound that plays when the user enters the site. Below the 3D model, I want you to add a timeline showing the period in which the dinosaur lived. Include descriptive information such as its diet, its size compared to a real-world reference point, where it was discovered, and which museum houses it can be visited. Use Three.js with WebGL to render the 3D models in the browser.`
 
 <img width="920" height="813" alt="image" src="https://github.com/user-attachments/assets/6978af9d-92e2-4731-aa5e-78e8dc7c564c" />
+
+After the execution finished, Codex created the following files inside the folder that it had ready in the directory.
+
+<img width="1037" height="607" alt="image" src="https://github.com/user-attachments/assets/7698b49d-2ac3-4d82-9981-335fe9c604d3" />
+
 
 Then I asked Codex to add the following dinosaur names to the list on the left: `Spinosaurus, Tyrannosaurus, Triceratops, Velociraptor. On the right, add tags related to each species selected by the user. Add a section on the right with the option to display the model with its texture and another option to display only the skeletal part of the model. Incorporate soft tones, with green colors,` and the result Codex provided was the following:
 
@@ -100,6 +109,27 @@ Full Screen view in puzzle assembly mode.
 <img width="274" height="558" alt="image" src="https://github.com/user-attachments/assets/790a489d-56a5-4949-b400-e5a8bca63e76" />
 <img width="271" height="556" alt="image" src="https://github.com/user-attachments/assets/2763c158-26d1-462f-9e91-9e34eb36edbf" />
 <img width="812" height="375" alt="image" src="https://github.com/user-attachments/assets/2ed533ac-6749-4fc4-8b6a-07527c260268" />
+
+## Installing Codex plugins to move workflow to the cloud
+
+Creating and running projects locally is useful. But when it comes to sharing the project with the outside world—that is, the internet—it's fascinating, since the product you spend time developing can be used, tested, and shared by many users around the world. This is where plugins, which can be used with Codex, come into play. Within ChatGPT, the plugins that were activated for my project were: GitHub, Vercel, and Supabase. From ChatGPT via the web, simply go to the Plugins section and then search for the three I mentioned earlier. Then click on "Install," and the process begins automatically.
+
+<img width="1029" height="258" alt="image" src="https://github.com/user-attachments/assets/c1364dda-b408-4907-b840-cf86851eaddf" />
+
+With the plugins ready and satisfied with the result, I then asked Codex to upload all the content to the GitHub repository. So, if you're thinking the same thing I am, everything in the repository was automated, uploaded, managed, and administered by Codex from a simple prompt, as shown in the following image:
+
+<img width="1098" height="798" alt="image" src="https://github.com/user-attachments/assets/1c301979-ccda-4bfa-99b9-054e57abbaf0" />
+
+The process of uploading the files to the repository took some time, but Codex continued working until everything was completed, as shown in the following image:
+
+<img width="1046" height="415" alt="image" src="https://github.com/user-attachments/assets/e04dd65c-2dac-4d4f-85d6-ad1143568c52" />
+
+<img width="975" height="485" alt="image" src="https://github.com/user-attachments/assets/1fa43367-c9f5-438d-98db-2208b60ef2ba" />
+
+And the final result of the deployment in Vercel is:
+
+<img width="975" height="520" alt="image" src="https://github.com/user-attachments/assets/050ba4df-04ba-4a48-8e1e-d7e258db6050" />
+
 
 ## Run Locally
 
