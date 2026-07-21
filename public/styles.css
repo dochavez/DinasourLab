@@ -22,10 +22,6 @@ main { min-width:0; display:grid;grid-template-rows:100px minmax(0,1fr) 160px;po
 .puzzle-controls button { border:1px solid #567a4e; border-radius:7px; background:#315d45; color:#fffdf2; padding:10px 13px; font-size:13px; line-height:1.1; font-weight:700; }
 .puzzle-controls button + button { background:#f3f0e4; color:#52614e; border-color:#cec8b7; }
 .puzzle-controls span { font-size:10px; color:#6b7568; }
-.life-scene-controls { margin-top:13px; padding:12px 0 2px; border-top:1px dashed #d1ccbf; }
-.life-scene-controls[hidden] { display:none; }
-.life-scene-controls button { width:100%; border:1px solid #6c7d49; border-radius:7px; background:linear-gradient(120deg,#556f3f,#80965b); color:#fffdf2; padding:11px 13px; font-size:13px; line-height:1.1; font-weight:700; box-shadow:0 3px 0 #405430; }
-.life-scene-controls p { margin:8px 2px 0; color:#61715c; font-size:11px; line-height:1.4; }
 .puzzle-hud { position:absolute; z-index:8; inset:18px 22px auto; display:grid; grid-template-columns:auto minmax(210px,360px); align-items:start; justify-content:space-between; gap:16px; pointer-events:none; }.puzzle-hud[hidden] { display:none; }
 .puzzle-timer { min-width:112px; padding:10px 13px; border:1px solid #d49b55; border-radius:11px; background:#fff8e8eb; color:#8e4e29; box-shadow:0 6px 17px #5c42272b; text-align:center; }
 .puzzle-timer span { display:block; font:9px 'DM Mono'; letter-spacing:.9px; }.puzzle-timer strong { display:block; margin-top:2px; font:700 24px Fraunces; letter-spacing:.7px; }
