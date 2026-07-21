@@ -196,4 +196,110 @@ DinasourLab/
 The project is asset-heavy: GLB dinosaur models account for the overwhelming majority of storage. The executable browser application itself is compact and concentrated in `public/app.js`, while the Supabase folder contains the persistence and validation layer for the competitive puzzle features.
 
 ```
+# DinasourLab - reconstructed work log
+
+Generated: 2026-07-21
+
+## Preservation scope
+
+This is a reconstruction of the work completed in this Codex task based on the available user requests, workspace files, Git commits, and deployment record. It is not a verbatim export of the Codex desktop conversation, private reasoning, authentication tokens, or hidden tool output.
+
+## Project purpose
+
+DinasourLab is a browser-based dinosaur exploration lab. It presents textured and skeletal GLB models in an interactive Three.js/WebGL viewer, provides dinosaur information, and includes timed assembly puzzles with a cross-user leaderboard.
+
+## Conversation and implementation timeline
+
+### 1. Initial dinosaur laboratory
+
+- Built the DinosaurLab/DinasourLab experience from the supplied visual direction.
+- Replaced the earlier bee-oriented content with dinosaur content, centered on Spinosaurus.
+- Added a welcome screen, a textured Spinosaurus model, a skeletal model option, a skeletal overlay option, 360-degree inspection, descriptive facts, and a geological timeline.
+- The initial request included welcome audio; it was later removed at the user's request.
+
+### 2. Viewer troubleshooting and local development
+
+- Repaired the welcome-screen entry action when the **Enter the laboratory** button did not advance.
+- Investigated missing GLB rendering and made the viewer load models in the browser through Three.js and WebGL.
+- Clarified that models must be tested through the local web server rather than opening `index.html` as a `file:///` URL.
+- Standardized local development on port `4173` using `node scripts/local-server.mjs`.
+- Resolved the `EADDRINUSE` issue by recognizing that it means another process is already using port 4173.
+
+### 3. Viewer visual quality and English content
+
+- Adjusted scene lighting/exposure so the textured model is visible with more faithful colors.
+- Converted presentation text, including the welcome screen, to English.
+- Retained browser controls for rotating, framing, fullscreen viewing, and model scale.
+
+### 4. Dinosaur collection expansion
+
+- Added support for additional textured and skeletal GLB pairs, preserving the same viewer flow used for Spinosaurus.
+- Corrected the Triceratops textured/skeletal model selection mapping after it was reversed.
+- Added Parasaurus, then expanded the menu/models with later supplied dinosaurs such as Pteranodon, Brachiosaurus, Ankylosaurus, and Mammoth where matching assets were available.
+- Removed Velociraptor from the collection in the latest content-cleanup pass.
+- Replaced generic collection symbols with dinosaur-shaped visual representations where the available UI assets supported them.
+
+### 5. Interaction controls and presentation design
+
+- Added directional lighting controls around the current model.
+- Added independent X, Y, and Z scaling controls.
+- Added dinosaur-specific environmental backgrounds/skybox behavior, then replaced generated scenery with supplied imagery when requested.
+- A proposed Brachiosaurus interactive-video feature was created conceptually and then fully removed by request; its normal model, skeleton, and puzzle support were retained.
+- Simplified navigation by removing Museums, Notes, and Back to collection.
+- Replaced Notebook, Compare, and Share controls with social sharing controls that share: “Hey, I visited the DinasourLab and completed the puzzles”.
+- Updated the welcome description to describe exploring different dinosaurs, 360-degree rotation, fullscreen viewing, and the puzzle game.
+- Removed the right-side Field Notes panel and icon; updated the Discovery of the Day content.
+
+### 6. Assembly puzzle game
+
+- Added puzzle mode for internally subdivided GLB models so users can manipulate floating pieces and rebuild the dinosaur in the viewer area.
+- Added puzzle support for Parasaurus, Triceratops, Spinosaurus, T-Rex, Brachiosaurus, and subsequent supplied subdivided assets when present.
+- Added larger **Assemble** and **Exit Assembly** controls.
+- Added instructional prompts before a run and a Continue action that begins the clock.
+- Iterated the time limit from 3 minutes, then 1 minute, and finally to the current 2 minutes 30 seconds.
+- Added a persistent upper-left countdown and a top progress bar that remain visible in fullscreen mode.
+- Added final-success feedback with balloons/confetti and a failed-run view with **Assembly not completed** and **Try Again**.
+
+### 7. Responsive/mobile work
+
+- Adapted the layout for phones and tablets in portrait and landscape orientations.
+- Made the collection/menu reachable on compact screens, kept puzzle controls accessible, and made dinosaur information and leaderboards usable in mobile layouts.
+- Preserved desktop presentation while allowing viewer, timer, progress, and panels to reflow at mobile breakpoints.
+
+### 8. GitHub and Vercel publication
+
+- Published source to `dochavez/DinasourLab` on GitHub.
+- Configured static deployment output for Vercel and deployed production at `https://dinosaurlab.vercel.app`.
+- Diagnosed an earlier Vercel 500 error as a serverless-function/static-deployment mismatch and deployed the app as a static site.
+- Confirmed production returned HTTP 200 after the corrected deployment.
+
+### 9. Supabase leaderboard and authentication
+
+- Added Supabase-backed player profiles and puzzle runs so users can compare fast completions.
+- Added a server-side score-submission function, database migration, and row-level security rules.
+- Added the sign-up/sign-in flow for puzzle players.
+- Added password visibility controls and password-reset/update flow.
+- Corrected email-confirmation redirect handling to use the production site rather than a non-running `localhost:3000` address.
+- Recorded the recommended Supabase authentication URL configuration:
+  - Site URL: `https://dinosaurlab.vercel.app`
+  - Redirect URLs: `https://dinosaurlab.vercel.app/**`, `http://localhost:4173/**`, and `http://127.0.0.1:4173/**`
+
+## Current technical map
+
+| Area | Location | Responsibility |
+| --- | --- | --- |
+| Browser application | `public/` | HTML/CSS/JavaScript, Three.js viewer, assets, responsive UI |
+| Main interaction logic | `public/app.js` | Models, model modes, controls, puzzles, authentication UI, leaderboard UI |
+| Welcome interaction | `public/welcome.js` | Welcome screen entry behavior |
+| Local server | `scripts/local-server.mjs` | Serves the application on port 4173 |
+| Supabase schema | `supabase/migrations/` | Profiles, puzzle-run data, policies |
+| Supabase function | `supabase/functions/puzzle-score/` | Validated puzzle-score submission |
+| Hosting config | `vercel.json` / `.vercel` output during deployment | Static deployment routing/output |
+
+## Security notes
+
+- Never store Supabase service-role keys, email confirmation tokens, password reset tokens, or GitHub tokens in this archive or the public client files.
+- The Supabase publishable/anon client key is intended to be public, but database access remains governed by Supabase Row Level Security and the score function.
+- For confirmation and recovery emails to work in production, Supabase URL Configuration must remain aligned with the production URL listed above.
+
 
