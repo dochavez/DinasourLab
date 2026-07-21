@@ -1,6 +1,6 @@
 # DinosaurLab
 
-# Live Demo visit: ([https://your-project-name.vercel.app](https://dinosaurlab.vercel.app/))
+# Live Demo visit: [(https://dinosaurlab.vercel.app/)]
 
 ## How this project was built
 
