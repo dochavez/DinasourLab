@@ -76,6 +76,13 @@ First, the user must register where it says "Sign in to Play," then create an ac
 
 <img width="1003" height="491" alt="image" src="https://github.com/user-attachments/assets/7c39956e-cadc-4544-a21f-033d7385792d" />
 
+Once the user has created their account or has already registered, they can log in and a screen will appear saying they only have two and a half minutes to solve the puzzle.
+
+<img width="973" height="531" alt="image" src="https://github.com/user-attachments/assets/1588f8fe-3898-4261-b151-da9c841cc37e" />
+
+The user will see the pieces floating in the air and must zoom in to complete the model. The time displayed in the upper left corner includes a progress bar indicating how many pieces are needed and how many have already been placed.
+
+<img width="1057" height="622" alt="image" src="https://github.com/user-attachments/assets/e7d0a7bd-1222-4f55-b6ba-dca53856e859" />
 
 ## Run Locally
 
