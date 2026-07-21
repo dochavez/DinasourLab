@@ -36,6 +36,8 @@ const celebrationParticles = document.querySelector('#celebrationParticles');
 const collectionPanel = document.querySelector('.collection-panel');
 const mobileMenuToggle = document.querySelector('#mobileMenuToggle');
 const collectionBackdrop = document.querySelector('#collectionBackdrop');
+const shareStatus = document.querySelector('#shareStatus');
+const shareMessage = 'Hey, I visited the DinasourLab and completed the puzzles';
 
 const scene = new THREE.Scene();
 scene.fog = new THREE.FogExp2(0xf2eee2, 0.017);
@@ -724,6 +726,31 @@ mobileMenuToggle.addEventListener('click', () => setCollectionDrawer(!collection
 collectionBackdrop.addEventListener('click', () => setCollectionDrawer(false));
 window.addEventListener('keydown', (event) => { if (event.key === 'Escape') setCollectionDrawer(false); });
 window.matchMedia('(min-width: 941px)').addEventListener('change', (event) => { if (event.matches) setCollectionDrawer(false); });
+
+function shareDinosaurLab(channel) {
+  const pageUrl = window.location.href;
+  const shareText = `${shareMessage} ${pageUrl}`;
+  const popup = (url) => window.open(url, '_blank', 'noopener,noreferrer');
+  if (channel === 'facebook') {
+    popup(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(pageUrl)}&quote=${encodeURIComponent(shareMessage)}`);
+    return;
+  }
+  if (channel === 'twitter') {
+    popup(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`);
+    return;
+  }
+  if (navigator.share && (channel === 'instagram' || channel === 'native')) {
+    navigator.share({ title: 'DinosaurLab', text: shareMessage, url: pageUrl }).catch(() => {});
+    return;
+  }
+  navigator.clipboard?.writeText(shareText).then(() => {
+    shareStatus.textContent = channel === 'instagram' ? 'Message copied for Instagram.' : 'Share message copied.';
+  }).catch(() => {
+    shareStatus.textContent = 'Copy this message: ' + shareText;
+  });
+  if (channel === 'instagram') popup('https://www.instagram.com/');
+}
+document.querySelectorAll('[data-share]').forEach((button) => button.addEventListener('click', () => shareDinosaurLab(button.dataset.share)));
 overlayToggle.addEventListener('change', () => setModel(activeModel));
 scaleControl.addEventListener('input', applyModelScale);
 axisScaleControls.forEach((control) => control.addEventListener('input', applyModelScale));

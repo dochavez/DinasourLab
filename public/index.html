@@ -16,8 +16,6 @@
         <nav>
           <a class="rail-link active" href="#inicio"><span class="rail-icon">⌂</span><small>Home</small></a>
           <a class="rail-link" href="#explorar"><span class="rail-icon">◉</span><small>Explore</small></a>
-          <a class="rail-link" href="#registro"><span class="rail-icon">✎</span><small>Notes</small></a>
-          <a class="rail-link" href="#museos"><span class="rail-icon">⌖</span><small>Museums</small></a>
         </nav>
       </aside>
 
@@ -48,10 +46,15 @@
 
       <main id="inicio">
         <header class="topbar">
-          <a href="#explorar" class="back-link">← Back to collection</a>
           <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-controls="explorar" aria-expanded="false"><span aria-hidden="true">☰</span> Dinosaurs</button>
           <div class="specimen-label"><span id="specimenNumber">SPECIMEN 01</span><strong id="specimenName">SPINOSAURUS</strong><em id="specimenLatin">Spinosaurus aegyptiacus</em></div>
-          <div class="top-actions"><button title="Notebook">✎<small>Notebook</small></button><button title="Compare">⌘<small>Compare</small></button><button title="Share">⌯<small>Share</small></button></div>
+          <div class="top-actions" aria-label="Share DinosaurLab">
+            <button class="share-action" data-share="facebook" type="button" title="Share on Facebook"><span class="share-icon" aria-hidden="true">f</span><small>Facebook</small></button>
+            <button class="share-action" data-share="twitter" type="button" title="Share on Twitter"><span class="share-icon" aria-hidden="true">𝕏</span><small>Twitter</small></button>
+            <button class="share-action" data-share="instagram" type="button" title="Share on Instagram"><span class="share-icon" aria-hidden="true">◎</span><small>Instagram</small></button>
+            <button class="share-action" data-share="native" type="button" title="Share DinosaurLab"><span class="share-icon" aria-hidden="true">↗</span><small>Share</small></button>
+          </div>
+          <span class="share-status" id="shareStatus" role="status" aria-live="polite"></span>
         </header>
 
         <section class="viewer-section" aria-label="Spinosaurus 3D viewer">
@@ -134,7 +137,7 @@
     </div>
 
     <section class="welcome-modal" id="welcomeModal" aria-modal="true" role="dialog" aria-labelledby="welcomeTitle">
-      <div class="welcome-card"><div class="welcome-sun"></div><div class="bones bones-a">☄</div><div class="bones bones-b">✦</div><p class="eyebrow">WELCOME TO</p><h2 id="welcomeTitle">Dinosaur<span>Lab</span></h2><p class="welcome-copy">Your expedition into the past begins here. Explore Spinosaurus, rotate its model, and discover its anatomy.</p><button id="enterLab">Enter the laboratory <span>→</span></button><small>Explore the anatomy of a Cretaceous giant</small></div>
+      <div class="welcome-card"><div class="welcome-sun"></div><div class="bones bones-a">☄</div><div class="bones bones-b">✦</div><p class="eyebrow">WELCOME TO</p><h2 id="welcomeTitle">Dinosaur<span>Lab</span></h2><p class="welcome-copy">Explore different dinosaurs, discover their anatomy, rotate them 360 degrees, view them in full screen, and play the puzzle game.</p><button id="enterLab">Enter the laboratory <span>→</span></button><small>Explore the anatomy of a Cretaceous giant</small></div>
     </section>
     <script type="importmap">
       {
