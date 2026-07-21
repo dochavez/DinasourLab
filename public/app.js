@@ -33,6 +33,9 @@ const puzzleContinueButton = document.querySelector('#puzzleContinue');
 const puzzleRetryButton = document.querySelector('#puzzleRetry');
 const puzzleCelebration = document.querySelector('#puzzleCelebration');
 const celebrationParticles = document.querySelector('#celebrationParticles');
+const collectionPanel = document.querySelector('.collection-panel');
+const mobileMenuToggle = document.querySelector('#mobileMenuToggle');
+const collectionBackdrop = document.querySelector('#collectionBackdrop');
 
 const scene = new THREE.Scene();
 scene.fog = new THREE.FogExp2(0xf2eee2, 0.017);
@@ -680,6 +683,13 @@ function loadSpecimen(specimenId) {
   loadModel('bones', specimen.bones, 'skeletal structure', request);
 }
 
+function setCollectionDrawer(open) {
+  collectionPanel.classList.toggle('mobile-open', open);
+  collectionBackdrop.classList.toggle('visible', open);
+  mobileMenuToggle.setAttribute('aria-expanded', String(open));
+  document.body.classList.toggle('collection-drawer-open', open);
+}
+
 if (window.location.protocol === 'file:') {
   loadingState.querySelector('b').textContent = 'The model needs a local server';
   loadingProgress.textContent = 'Browsers block 3D files when index.html is opened directly.';
@@ -705,7 +715,15 @@ function setModel(type) {
   if (assets[type]) frameModel(assets[type]);
 }
 modelButtons.forEach((button) => button.addEventListener('click', () => setModel(button.dataset.model)));
-specimenCards.forEach((card) => card.addEventListener('click', () => loadSpecimen(card.dataset.specimen)));
+specimenCards.forEach((card) => card.addEventListener('click', () => {
+  if (!card.dataset.specimen) return;
+  loadSpecimen(card.dataset.specimen);
+  setCollectionDrawer(false);
+}));
+mobileMenuToggle.addEventListener('click', () => setCollectionDrawer(!collectionPanel.classList.contains('mobile-open')));
+collectionBackdrop.addEventListener('click', () => setCollectionDrawer(false));
+window.addEventListener('keydown', (event) => { if (event.key === 'Escape') setCollectionDrawer(false); });
+window.matchMedia('(min-width: 941px)').addEventListener('change', (event) => { if (event.matches) setCollectionDrawer(false); });
 overlayToggle.addEventListener('change', () => setModel(activeModel));
 scaleControl.addEventListener('input', applyModelScale);
 axisScaleControls.forEach((control) => control.addEventListener('input', applyModelScale));
