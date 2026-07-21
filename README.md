@@ -67,6 +67,14 @@ One of the things I enjoyed about this part of the puzzle was that Codex had the
 
 <img width="973" height="523" alt="image" src="https://github.com/user-attachments/assets/36d89bfc-fbb5-4615-baf2-e6d7acc1b0b4" />
 
+## How to play the puzzle section.
+
+First, the user must register where it says "Sign in to Play," then create an account by entering a valid email address. They will receive an email confirmation request by clicking the link in their inbox. Afterward, they will be able to enter their credentials.
+
+<img width="975" height="542" alt="image" src="https://github.com/user-attachments/assets/b63b34b2-32dc-45c4-97e2-fa0d7253f073" />
+
+
+<img width="1003" height="491" alt="image" src="https://github.com/user-attachments/assets/7c39956e-cadc-4544-a21f-033d7385792d" />
 
 
 ## Run Locally
