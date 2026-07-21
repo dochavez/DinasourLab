@@ -54,8 +54,15 @@ const authClose = document.querySelector('#authClose');
 const authDisplayName = document.querySelector('#authDisplayName');
 const authEmail = document.querySelector('#authEmail');
 const authPassword = document.querySelector('#authPassword');
+const authConfirmPassword = document.querySelector('#authConfirmPassword');
+const authProfileFields = document.querySelector('#authProfileFields');
+const authConfirmPasswordRow = document.querySelector('#authConfirmPasswordRow');
+const authDescription = document.querySelector('#authDescription');
 const authMessage = document.querySelector('#authMessage');
+const authSignIn = document.querySelector('#authSignIn');
 const authSignUp = document.querySelector('#authSignUp');
+const authUpdatePassword = document.querySelector('#authUpdatePassword');
+const authForgotPassword = document.querySelector('#authForgotPassword');
 const supabase = createClient(window.DINOSAURLAB_SUPABASE.url, window.DINOSAURLAB_SUPABASE.publishableKey);
 
 const scene = new THREE.Scene();
@@ -115,6 +122,7 @@ let currentUser = null;
 let currentDisplayName = '';
 let currentPuzzleRunId = null;
 let startPuzzleAfterAuth = false;
+let authMode = 'standard';
 const puzzleGroup = new THREE.Group();
 puzzleGroup.visible = false;
 scene.add(puzzleGroup);
@@ -395,14 +403,35 @@ function escapeHtml(value) {
 
 function setAuthMessage(message = '') { authMessage.textContent = message; }
 
-function openAuthModal(message = 'Sign in to start a recorded puzzle run.') {
+function setAuthMode(mode = 'standard') {
+  authMode = mode;
+  const recovery = mode === 'recovery';
+  authProfileFields.hidden = recovery;
+  authConfirmPasswordRow.hidden = !recovery;
+  authForgotPassword.hidden = recovery;
+  authSignIn.hidden = recovery;
+  authSignUp.hidden = recovery;
+  authUpdatePassword.hidden = !recovery;
+  authPassword.autocomplete = recovery ? 'new-password' : 'current-password';
+  authPassword.placeholder = recovery ? 'Choose a new password' : 'At least 6 characters';
+  authPassword.value = '';
+  authConfirmPassword.value = '';
+  authModal.querySelector('#authTitle').textContent = recovery
+    ? 'Reset your password'
+    : (currentUser ? 'Set your player name' : 'Join the leaderboard');
+  authDescription.textContent = recovery
+    ? 'Choose a new password to return to DinosaurLab.'
+    : 'Sign in to record a server-timed puzzle score and see other players.';
+}
+
+function openAuthModal(message = 'Sign in to start a recorded puzzle run.', mode = 'standard') {
+  setAuthMode(mode);
   setAuthMessage(message);
   authModal.hidden = false;
-  authModal.querySelector('#authTitle').textContent = currentUser ? 'Set your player name' : 'Join the leaderboard';
   if (currentDisplayName) authDisplayName.value = currentDisplayName;
 }
 
-function closeAuthModal() { authModal.hidden = true; setAuthMessage(''); }
+function closeAuthModal() { authModal.hidden = true; setAuthMessage(''); if (authMode === 'recovery') setAuthMode('standard'); }
 
 async function refreshCurrentProfile() {
   if (!currentUser) { currentDisplayName = ''; return; }
@@ -872,6 +901,17 @@ leaderboardRefresh.addEventListener('click', loadLeaderboard);
 authClose.addEventListener('click', closeAuthModal);
 authForm.addEventListener('submit', async (event) => {
   event.preventDefault();
+  if (authMode === 'recovery') {
+    const newPassword = authPassword.value;
+    if (newPassword.length < 6) { setAuthMessage('Use a password with at least 6 characters.'); return; }
+    if (newPassword !== authConfirmPassword.value) { setAuthMessage('The new passwords do not match.'); return; }
+    setAuthMessage('Saving your new password…');
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+    if (error) { setAuthMessage(error.message); return; }
+    setAuthMessage('Password updated. You are signed in and ready to play.');
+    setTimeout(closeAuthModal, 1200);
+    return;
+  }
   setAuthMessage('Signing in…');
   const { error } = await supabase.auth.signInWithPassword({ email: authEmail.value.trim(), password: authPassword.value });
   if (error) { setAuthMessage(error.message); return; }
@@ -882,12 +922,27 @@ authSignUp.addEventListener('click', async () => {
   const { error } = await supabase.auth.signUp({ email: authEmail.value.trim(), password: authPassword.value, options: { emailRedirectTo: authRedirectUrl } });
   setAuthMessage(error ? error.message : 'Account created. Confirm your email to return to DinosaurLab, then sign in.');
 });
-supabase.auth.onAuthStateChange((_event, session) => {
+authForgotPassword.addEventListener('click', async () => {
+  if (!authEmail.checkValidity()) { authEmail.reportValidity(); return; }
+  setAuthMessage('Sending password reset email…');
+  const { error } = await supabase.auth.resetPasswordForEmail(authEmail.value.trim(), { redirectTo: authRedirectUrl });
+  setAuthMessage(error ? error.message : 'Password reset email sent. Open the link to choose a new password.');
+});
+document.querySelectorAll('[data-password-toggle]').forEach((toggle) => toggle.addEventListener('click', () => {
+  const input = document.querySelector(`#${toggle.dataset.passwordToggle}`);
+  const visible = input.type === 'text';
+  input.type = visible ? 'password' : 'text';
+  toggle.textContent = visible ? 'Show' : 'Hide';
+  toggle.setAttribute('aria-label', visible ? 'Show password' : 'Hide password');
+  toggle.setAttribute('aria-pressed', String(!visible));
+}));
+supabase.auth.onAuthStateChange((event, session) => {
   currentUser = session?.user || null;
   queueMicrotask(async () => {
     await refreshCurrentProfile();
     renderAccountButton();
     await loadLeaderboard();
+    if (event === 'PASSWORD_RECOVERY') openAuthModal('Create a new password to finish resetting your account.', 'recovery');
     if (currentUser && startPuzzleAfterAuth) { startPuzzleAfterAuth = false; startPuzzle(); }
   });
 });

@@ -34,11 +34,10 @@
           <button class="species-card" data-specimen="brachiosaurus" aria-pressed="false"><span class="species-thumb brachiosaurus"><svg class="species-silhouette" viewBox="0 0 100 60" aria-hidden="true"><path d="M8 41l20-8 4-23 8-7 4 7-4 22 24 2 7-15 10-11 7 3-9 11-2 17 16 5-9 5-12-4-4 14-5-1 2-14-24-1-5 14-5-1 2-14-10 3-8 8 3-10z"/></svg></span><span><b>Brachiosaurus</b><small>Late Jurassic</small></span><i>›</i></button>
           <button class="species-card" data-specimen="ankylosaurus" aria-pressed="false"><span class="species-thumb ankylosaurus"><svg class="species-silhouette" viewBox="0 0 100 60" aria-hidden="true"><path d="M5 39l12-8 12-12 30-2 14 8 17-1-9 8-13 2-4 13-6-1 2-12-18-2-5 13-6-1 2-12-13 1-9 8 2-9-8-1z"/><path d="M28 18l5-8 5 8 6-9 5 9 7-8 4 10"/></svg></span><span><b>Ankylosaurus</b><small>Late Cretaceous</small></span><i>›</i></button>
           <button class="species-card" data-specimen="mammoth" aria-pressed="false"><span class="species-thumb mammoth"><svg class="species-silhouette" viewBox="0 0 100 60" aria-hidden="true"><path d="M8 39l14-7 8-15 29-3 16 8 8 14-6 12-6-1 1-12-12-2-2 14-6-1 1-14-16 1-3 14-6-1 2-13-12 2-7 8 2-10-7-3z"/><path d="M77 31c8 1 12 6 8 14-3-6-7-8-12-8M77 34c5 2 6 6 4 10"/></svg></span><span><b>Woolly Mammoth</b><small>Pleistocene Epoch</small></span><i>›</i></button>
-          <button class="species-card"><span class="species-thumb raptor"><svg class="species-silhouette" viewBox="0 0 100 60" aria-hidden="true"><path d="M6 40l17-5 11-15 14-7 13 3 7 6 17 2-8 6-12 1-4 13-5-1 1-12-9-2-4 18-5-1 1-17-10 3-5 12-5-1 2-11-8 2-8 8 3-10-9-1z"/></svg></span><span><b>Velociraptor</b><small>Cretaceous Period</small></span><i>›</i></button>
         </div>
         <article class="discovery-card" id="registro">
           <span class="leaf">✣</span>
-          <div><i>Discovery of the day</i><p>The Spinosaurus’ dorsal sail could rise more than 1.6 m high.</p></div>
+          <div><i>Discovery of the day</i><p>Spinosaurus had a paddle-shaped tail that helped it move through ancient North African waterways.</p></div>
         </article>
       </aside>
 
@@ -139,7 +138,6 @@
         <section class="fact"><span class="fact-icon">↕</span><div><h2>Size</h2><p id="sizeCopy">Up to 15 m long: roughly the length of a city bus. Its dorsal sail stood taller than an adult person.</p></div></section>
         <section class="fact"><span class="fact-icon">⌖</span><div><h2>Discovery</h2><p id="discoveryCopy">The first remains were found in 1912 in Egypt’s Bahariya Oasis by Richard Markgraf.</p></div></section>
         <section class="fact"><span class="fact-icon">⌂</span><div><h2>Visit</h2><p id="visitCopy">Chicago’s Field Museum displays “Sobek,” a full-scale reconstruction inspired by fossils from the Sahara.</p><a id="visitLink" href="https://www.fieldmuseum.org/exhibition/halls-and-galleries/spinosaurus" target="_blank" rel="noreferrer">Plan your visit ↗</a></div></section>
-        <article class="field-card"><div><span>FIELD NOTES</span><b>A giant of ancient African rivers.</b></div><span class="field-skull">♜</span></article>
       </aside>
     </div>
 
@@ -150,12 +148,16 @@
       <form class="auth-card" id="authForm">
         <button class="auth-close" id="authClose" type="button" aria-label="Close sign in">×</button>
         <p class="eyebrow">PUZZLE PLAYER</p><h2 id="authTitle">Join the leaderboard</h2>
-        <p>Sign in to record a server-timed puzzle score and see other players.</p>
-        <label>Public nickname<input id="authDisplayName" type="text" minlength="2" maxlength="24" autocomplete="nickname" placeholder="PaleoExplorer" /></label>
-        <label>Email<input id="authEmail" type="email" autocomplete="email" required placeholder="you@example.com" /></label>
-        <label>Password<input id="authPassword" type="password" autocomplete="current-password" required minlength="6" placeholder="At least 6 characters" /></label>
+        <p id="authDescription">Sign in to record a server-timed puzzle score and see other players.</p>
+        <div id="authProfileFields">
+          <label>Public nickname<input id="authDisplayName" type="text" minlength="2" maxlength="24" autocomplete="nickname" placeholder="PaleoExplorer" /></label>
+          <label>Email<input id="authEmail" type="email" autocomplete="email" required placeholder="you@example.com" /></label>
+        </div>
+        <label>Password<span class="password-input-wrap"><input id="authPassword" type="password" autocomplete="current-password" required minlength="6" placeholder="At least 6 characters" /><button class="password-toggle" type="button" data-password-toggle="authPassword" aria-label="Show password" aria-pressed="false">Show</button></span></label>
+        <label id="authConfirmPasswordRow" hidden>Confirm new password<span class="password-input-wrap"><input id="authConfirmPassword" type="password" autocomplete="new-password" minlength="6" placeholder="Re-enter your new password" /><button class="password-toggle" type="button" data-password-toggle="authConfirmPassword" aria-label="Show password" aria-pressed="false">Show</button></span></label>
+        <button class="auth-forgot" id="authForgotPassword" type="button">Forgot password?</button>
         <p class="auth-message" id="authMessage" aria-live="polite"></p>
-        <div class="auth-actions"><button id="authSignIn" type="submit">Sign in</button><button id="authSignUp" type="button">Create account</button></div>
+        <div class="auth-actions"><button id="authSignIn" type="submit">Sign in</button><button id="authSignUp" type="button">Create account</button><button id="authUpdatePassword" type="submit" hidden>Save new password</button></div>
       </form>
     </section>
     <script type="importmap">
