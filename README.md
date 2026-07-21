@@ -1,5 +1,7 @@
 # DinosaurLab
 
+# Live Demo visit: ([https://your-project-name.vercel.app](https://dinosaurlab.vercel.app/))
+
 ## How this project was built
 
 Thinking about elementary school teachers and children, I asked myself the following question: Can we create a web application to teach about dinosaurs and add some gamification to make it more interactive? With that in mind, I decided to create a small, interactive website that would present organized information about dinosaurs.
