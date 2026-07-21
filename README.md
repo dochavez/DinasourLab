@@ -130,6 +130,13 @@ And the final result of the deployment in Vercel is:
 
 <img width="975" height="520" alt="image" src="https://github.com/user-attachments/assets/050ba4df-04ba-4a48-8e1e-d7e258db6050" />
 
+Similarly, to create a more interactive element, the idea arose to add a leaderboard to see which user could solve the puzzles in the shortest time. This is where Supabase comes in, as it will allow us to store this data in a database. Therefore, I again asked Codex, via a prompt, to handle this task. And their response was as follows:
+
+<img width="975" height="411" alt="image" src="https://github.com/user-attachments/assets/c9fd3e70-63df-4590-958a-630737547935" />
+
+And the final result in Supabase is the following, taking into consideration that Codex was responsible for creating the tables, establishing their primary keys, making the relationships, the type of field to store, and the length of the values.
+
+<img width="975" height="558" alt="image" src="https://github.com/user-attachments/assets/df9dd00a-ed2d-41fa-911f-19ce50892222" />
 
 ## Run Locally
 
