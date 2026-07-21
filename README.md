@@ -80,7 +80,7 @@ Once the user has created their account or has already registered, they can log 
 
 <img width="973" height="531" alt="image" src="https://github.com/user-attachments/assets/1588f8fe-3898-4261-b151-da9c841cc37e" />
 
-The user will see the pieces floating in the air and must zoom in to complete the model. The time displayed in the upper left corner includes a progress bar indicating how many pieces are needed and how many have already been placed.
+The user will see the pieces floating in the air and must bring them closer to complete the model. The timer appears in the upper left corner, along with a progress bar indicating how many pieces are needed and how many have already been placed. If the user fails to assemble the entire model within the time limit, they will receive an "incomplete" message. If the user successfully assembles the model within the allotted time, they will be added to the participant registration list, and confetti and balloons will appear on the screen.
 
 <img width="1057" height="622" alt="image" src="https://github.com/user-attachments/assets/e7d0a7bd-1222-4f55-b6ba-dca53856e859" />
 
@@ -102,4 +102,4 @@ Then open `http://localhost:4173`. The server is necessary for the browser to lo
 
 - In the textured model, enable **Overlay Skeleton Structure** to see both at the same time.
 
-- The soundscape starts when you click "Enter Lab" and can be muted from the sidebar.
+
