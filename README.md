@@ -84,6 +84,17 @@ The user will see the pieces floating in the air and must bring them closer to c
 
 <img width="1057" height="622" alt="image" src="https://github.com/user-attachments/assets/e7d0a7bd-1222-4f55-b6ba-dca53856e859" />
 
+Full Screen view in puzzle assembly mode.
+
+<img width="975" height="609" alt="image" src="https://github.com/user-attachments/assets/e5a2fbd4-d0f0-4764-a104-10ef57c78c0d" />
+
+## View from a mobile device
+
+<img width="258" height="561" alt="image" src="https://github.com/user-attachments/assets/5adabeae-2ebe-4832-ade3-b3e8f8cf8cfb" />
+<img width="274" height="558" alt="image" src="https://github.com/user-attachments/assets/790a489d-56a5-4949-b400-e5a8bca63e76" />
+<img width="271" height="556" alt="image" src="https://github.com/user-attachments/assets/2763c158-26d1-462f-9e91-9e34eb36edbf" />
+<img width="812" height="375" alt="image" src="https://github.com/user-attachments/assets/2ed533ac-6749-4fc4-8b6a-07527c260268" />
+
 ## Run Locally
 
 From this folder, start any static server, for example:
@@ -102,4 +113,87 @@ Then open `http://localhost:4173`. The server is necessary for the browser to lo
 
 - In the textured model, enable **Overlay Skeleton Structure** to see both at the same time.
 
+## The following information is for statistical purposes, generated and obtained directly by Codex.
+
+```
+# DinasourLab - project statistics
+
+Generated: 2026-07-21, 10:41 (America/Guatemala)
+
+## Measurement scope
+
+This snapshot measures the implementation contents of the project before this archive was added. It excludes Git metadata (`.git`), Vercel build output (`.vercel`), and the generated `project-archive` folder itself, so the code statistics remain useful rather than counting this documentation recursively.
+
+## Summary
+
+| Metric | Value |
+| --- | ---: |
+| Total project implementation files | 47 |
+| Total size | 726,787,265 bytes (about 693 MiB) |
+| Code/configuration/document files counted | 12 |
+| Lines in code/configuration/document files | 1,431 |
+| GLB 3D model files | 24 |
+| PNG image files | 5 |
+
+The line count includes files with these extensions: `.js`, `.mjs`, `.html`, `.css`, `.sql`, `.ts`, `.json`, and `.md`. It is a physical line count, not a complexity metric, and includes configuration and documentation as stated above.
+
+## File-type breakdown
+
+| Extension | Files | Total bytes |
+| --- | ---: | ---: |
+| `.glb` | 24 | 708,782,220 |
+| `.png` | 5 | 17,883,946 |
+| `.js` | 3 | 51,578 |
+| `.css` | 1 | 34,203 |
+| `.html` | 1 | 17,499 |
+| `.md` | 1 | 6,079 |
+| `.ts` | 1 | 4,472 |
+| `.svg` | 4 | 3,653 |
+| `.sql` | 1 | 1,989 |
+| `.mjs` | 1 | 1,071 |
+| `.json` | 3 | 386 |
+| `.bat` | 1 | 160 |
+
+## Largest text/code files by line count
+
+| File | Lines | Role |
+| --- | ---: | --- |
+| `public/app.js` | 919 | Main viewer, puzzle, UI, and authentication logic |
+| `public/index.html` | 167 | App structure and UI markup |
+| `public/styles.css` | 151 | Presentation and responsive layout |
+| `supabase/functions/puzzle-score/index.ts` | 68 | Server-side score submission |
+| `README.md` | 35 | Project documentation |
+| `supabase/migrations/20260720170000_create_puzzle_leaderboard.sql` | 33 | Leaderboard database schema and policies |
+| `scripts/local-server.mjs` | 19 | Local server for port 4173 |
+| `public/welcome.js` | 12 | Welcome-screen interaction |
+| `package-lock.json` | 12 | Dependency lock data |
+| `package.json` | 8 | Package metadata/scripts |
+| `public/supabase-config.js` | 4 | Browser-side Supabase configuration |
+| `vercel.json` | 3 | Vercel deployment configuration |
+
+## Structure
+
+```text
+DinasourLab/
+|- public/                         Static browser app, UI, Three.js assets and GLB models
+|  |- app.js                        Main interactive application logic
+|  |- index.html                    Page markup
+|  |- styles.css                    Desktop/mobile styling
+|  |- welcome.js                    Welcome entry behavior
+|  `- *.glb, *.png, *.svg           Dinosaur models and visual assets
+|- scripts/
+|  `- local-server.mjs              Local development server (port 4173)
+|- supabase/
+|  |- migrations/                   Leaderboard schema and RLS policies
+|  `- functions/puzzle-score/       Validated score-submission edge function
+|- package.json                     Local command metadata
+|- vercel.json                      Static deployment configuration
+`- README.md                        Project documentation
+```
+
+## Interpretation
+
+The project is asset-heavy: GLB dinosaur models account for the overwhelming majority of storage. The executable browser application itself is compact and concentrated in `public/app.js`, while the Supabase folder contains the persistence and validation layer for the competitive puzzle features.
+
+```
 
