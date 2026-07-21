@@ -90,6 +90,10 @@ Full Screen view in puzzle assembly mode.
 
 <img width="975" height="609" alt="image" src="https://github.com/user-attachments/assets/e5a2fbd4-d0f0-4764-a104-10ef57c78c0d" />
 
+## Assembly completed
+
+<img width="1066" height="762" alt="image" src="https://github.com/user-attachments/assets/599051b0-052a-41e3-a96d-e3811f4553a3" />
+
 ## View from a mobile device
 
 <img width="258" height="561" alt="image" src="https://github.com/user-attachments/assets/5adabeae-2ebe-4832-ade3-b3e8f8cf8cfb" />
