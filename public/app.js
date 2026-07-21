@@ -39,6 +39,10 @@ const mobileMenuToggle = document.querySelector('#mobileMenuToggle');
 const collectionBackdrop = document.querySelector('#collectionBackdrop');
 const shareStatus = document.querySelector('#shareStatus');
 const shareMessage = 'Hey, I visited the DinasourLab and completed the puzzles';
+const productionAuthRedirect = 'https://dinosaurlab.vercel.app/';
+const authRedirectUrl = ['localhost', '127.0.0.1'].includes(window.location.hostname)
+  ? window.location.origin
+  : productionAuthRedirect;
 const playerAccountButton = document.querySelector('#playerAccountButton');
 const leaderboardFilter = document.querySelector('#leaderboardFilter');
 const leaderboardList = document.querySelector('#leaderboardList');
@@ -875,8 +879,8 @@ authForm.addEventListener('submit', async (event) => {
 });
 authSignUp.addEventListener('click', async () => {
   setAuthMessage('Creating account…');
-  const { error } = await supabase.auth.signUp({ email: authEmail.value.trim(), password: authPassword.value, options: { emailRedirectTo: window.location.origin } });
-  setAuthMessage(error ? error.message : 'Account created. Check your email to confirm it, then sign in.');
+  const { error } = await supabase.auth.signUp({ email: authEmail.value.trim(), password: authPassword.value, options: { emailRedirectTo: authRedirectUrl } });
+  setAuthMessage(error ? error.message : 'Account created. Confirm your email to return to DinosaurLab, then sign in.');
 });
 supabase.auth.onAuthStateChange((_event, session) => {
   currentUser = session?.user || null;
