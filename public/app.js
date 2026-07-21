@@ -38,6 +38,9 @@ const mobileMenuToggle = document.querySelector('#mobileMenuToggle');
 const collectionBackdrop = document.querySelector('#collectionBackdrop');
 const shareStatus = document.querySelector('#shareStatus');
 const shareMessage = 'Hey, I visited the DinasourLab and completed the puzzles';
+const lifeSceneControls = document.querySelector('#lifeSceneControls');
+const toggleLifeSceneButton = document.querySelector('#toggleLifeScene');
+const lifeSceneCaption = document.querySelector('#lifeSceneCaption');
 
 const scene = new THREE.Scene();
 scene.fog = new THREE.FogExp2(0xf2eee2, 0.017);
@@ -95,6 +98,12 @@ let puzzleDeadline = 0;
 const puzzleGroup = new THREE.Group();
 puzzleGroup.visible = false;
 scene.add(puzzleGroup);
+const lifeSceneGroup = new THREE.Group();
+lifeSceneGroup.visible = false;
+scene.add(lifeSceneGroup);
+const lifeClock = new THREE.Clock();
+let lifeSceneActive = false;
+let lifeActors = [];
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 const dragPlane = new THREE.Plane();
@@ -238,7 +247,7 @@ function frameModel(object) {
 }
 
 function updateLightDirection() {
-  const object = (puzzleActive && puzzleGuide) ? puzzleGuide : (assets[activeModel] || assets.skin || assets.bones);
+  const object = lifeSceneActive ? lifeSceneGroup : ((puzzleActive && puzzleGuide) ? puzzleGuide : (assets[activeModel] || assets.skin || assets.bones));
   if (!object) return;
   object.updateMatrixWorld(true);
   const box = new THREE.Box3().setFromObject(object);
@@ -319,6 +328,128 @@ function clearSpecimen() {
       disposeObject(object);
     }
     assets[type] = null;
+  });
+}
+
+function addLifeTree(x, z, scale = 1) {
+  const tree = new THREE.Group();
+  const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.12 * scale, 0.18 * scale, 1.8 * scale, 7), new THREE.MeshStandardMaterial({ color: 0x6c4a2e, roughness: 1 }));
+  trunk.position.y = 0.9 * scale;
+  const crownMaterial = new THREE.MeshStandardMaterial({ color: 0x54763d, roughness: 0.96 });
+  const crown = new THREE.Mesh(new THREE.DodecahedronGeometry(0.78 * scale, 1), crownMaterial);
+  crown.position.y = 2.05 * scale;
+  const crownTop = new THREE.Mesh(new THREE.DodecahedronGeometry(0.55 * scale, 1), crownMaterial);
+  crownTop.position.set(0.26 * scale, 2.6 * scale, -0.08 * scale);
+  tree.add(trunk, crown, crownTop);
+  tree.position.set(x, -1.58, z);
+  tree.traverse((child) => { if (child.isMesh) { child.castShadow = true; child.receiveShadow = true; } });
+  lifeSceneGroup.add(tree);
+}
+
+function addLifeFerns() {
+  const material = new THREE.MeshStandardMaterial({ color: 0x789352, roughness: 1, side: THREE.DoubleSide });
+  for (let i = 0; i < 28; i += 1) {
+    const blade = new THREE.Mesh(new THREE.ConeGeometry(0.16 + (i % 3) * 0.05, 0.65 + (i % 4) * 0.08, 5), material);
+    const angle = i * 2.399;
+    const radius = 2.4 + (i % 7) * 0.75;
+    blade.position.set(Math.cos(angle) * radius, -1.25, Math.sin(angle) * radius * 0.66);
+    blade.rotation.z = Math.sin(i) * 0.36;
+    blade.rotation.y = angle;
+    blade.castShadow = true;
+    lifeSceneGroup.add(blade);
+  }
+}
+
+function makeLifeBrachiosaurus({ x, z, scale, heading, behavior, phase }) {
+  const actor = new THREE.Group();
+  const dinosaur = assets.skin.clone(true);
+  dinosaur.position.set(0, assets.skin.position.y, 0);
+  dinosaur.rotation.set(0, 0, 0);
+  dinosaur.scale.copy(assets.skin.scale);
+  actor.add(dinosaur);
+  actor.position.set(x, 0, z);
+  actor.rotation.y = heading;
+  actor.scale.setScalar(scale);
+  actor.userData = { dinosaur, behavior, phase, baseX: x, baseY: 0, baseZ: z, heading };
+  lifeActors.push(actor);
+  lifeSceneGroup.add(actor);
+}
+
+function buildLifeScene() {
+  lifeSceneGroup.clear();
+  lifeActors = [];
+  const meadow = new THREE.Mesh(new THREE.CircleGeometry(18, 72), new THREE.MeshStandardMaterial({ color: 0x7d9a5a, roughness: 1 }));
+  meadow.rotation.x = -Math.PI / 2;
+  meadow.position.y = -1.61;
+  meadow.receiveShadow = true;
+  lifeSceneGroup.add(meadow);
+  const pond = new THREE.Mesh(new THREE.CircleGeometry(4.2, 48), new THREE.MeshStandardMaterial({ color: 0x77b3b3, roughness: 0.3, metalness: 0.08, transparent: true, opacity: 0.75 }));
+  pond.rotation.x = -Math.PI / 2;
+  pond.scale.set(1.35, 0.62, 1);
+  pond.position.set(3.8, -1.58, -3.8);
+  lifeSceneGroup.add(pond);
+  [[-5.3, -1.6, 1.35], [-4.4, 2.8, 1.05], [2.3, 4.5, 1.2], [6.2, 1.4, 1.1], [0.4, -5.8, 0.95]].forEach(([x, z, scale]) => addLifeTree(x, z, scale));
+  addLifeFerns();
+  makeLifeBrachiosaurus({ x: -2.8, z: -0.7, scale: 0.78, heading: 0.25, behavior: 'browsing', phase: 0.3 });
+  makeLifeBrachiosaurus({ x: -7.2, z: 2.7, scale: 0.64, heading: Math.PI / 2, behavior: 'walking', phase: 0.1 });
+  makeLifeBrachiosaurus({ x: 1.9, z: 2.8, scale: 0.52, heading: -2.4, behavior: 'roaming', phase: 1.5 });
+  makeLifeBrachiosaurus({ x: 4.8, z: 0.2, scale: 0.68, heading: -2.7, behavior: 'resting', phase: 2.4 });
+}
+
+function enterLifeScene() {
+  if (currentSpecimen !== 'brachiosaurus' || !assets.skin) return;
+  if (puzzleActive) exitPuzzle();
+  buildLifeScene();
+  lifeSceneActive = true;
+  lifeSceneGroup.visible = true;
+  wrappers.skin.visible = false;
+  wrappers.bones.visible = false;
+  overlayRow.classList.add('disabled');
+  grid.material.opacity = 0;
+  toggleLifeSceneButton.textContent = 'Exit life scene';
+  lifeSceneCaption.textContent = 'Life scene playing — drag to explore the Brachiosaurus herd in 360°.';
+  frameModel(lifeSceneGroup);
+}
+
+function exitLifeScene(frame = true) {
+  if (!lifeSceneActive) return;
+  lifeSceneActive = false;
+  lifeSceneGroup.visible = false;
+  lifeSceneGroup.clear();
+  lifeActors = [];
+  wrappers.skin.visible = activeModel === 'skin';
+  wrappers.bones.visible = activeModel === 'bones' || (activeModel === 'skin' && overlayToggle.checked);
+  overlayRow.classList.toggle('disabled', activeModel !== 'skin');
+  toggleLifeSceneButton.textContent = 'Play life scene';
+  lifeSceneCaption.textContent = 'Explore a Late Jurassic herd: browse, walk, rest, and watch.';
+  if (frame && assets[activeModel]) frameModel(assets[activeModel]);
+}
+
+function animateLifeScene(time) {
+  if (!lifeSceneActive) return;
+  lifeActors.forEach((actor) => {
+    const { dinosaur, behavior, phase, baseX, baseY, baseZ, heading } = actor.userData;
+    const sway = Math.sin(time * 1.15 + phase);
+    actor.position.y = baseY + sway * 0.035;
+    dinosaur.rotation.z = 0;
+    if (behavior === 'browsing') {
+      dinosaur.rotation.z = 0.06 + Math.sin(time * 0.9 + phase) * 0.035;
+      actor.rotation.y = heading + Math.sin(time * 0.28) * 0.08;
+    } else if (behavior === 'walking') {
+      const stride = (time * 0.42 + phase) % 1;
+      actor.position.x = -7.4 + stride * 11.5;
+      actor.position.z = 2.7 + Math.sin(stride * Math.PI * 2) * 0.45;
+      actor.rotation.y = Math.PI / 2 + Math.sin(time * 2.5) * 0.035;
+      dinosaur.rotation.z = Math.sin(time * 5 + phase) * 0.025;
+    } else if (behavior === 'roaming') {
+      actor.position.x = baseX + Math.cos(time * 0.42 + phase) * 1.2;
+      actor.position.z = baseZ + Math.sin(time * 0.42 + phase) * 0.8;
+      actor.rotation.y = -2.4 + Math.cos(time * 0.42 + phase) * 0.5;
+      dinosaur.rotation.z = Math.sin(time * 2.2 + phase) * 0.018;
+    } else {
+      actor.rotation.y = heading + Math.sin(time * 0.35 + phase) * 0.2;
+      dinosaur.rotation.z = -0.035 + Math.sin(time * 0.7 + phase) * 0.015;
+    }
   });
 }
 
@@ -551,6 +682,7 @@ function startPuzzle() {
   const specimenId = currentSpecimen;
   const specimen = specimens[specimenId];
   if (!specimen?.puzzle) return;
+  if (lifeSceneActive) exitLifeScene(false);
   const activate = () => {
     puzzleActive = true;
     puzzleGroup.visible = true;
@@ -656,9 +788,11 @@ function loadModel(type, file, label, request) {
 function loadSpecimen(specimenId) {
   const specimen = specimens[specimenId];
   if (!specimen) return;
+  if (lifeSceneActive) exitLifeScene(false);
   if (puzzleActive) exitPuzzle();
   if (puzzleLoaded && puzzleSpecimen !== specimenId) clearPuzzle();
   currentSpecimen = specimenId;
+  lifeSceneControls.hidden = specimenId !== 'brachiosaurus';
   puzzleControls.hidden = !specimen.puzzle;
   startPuzzleButton.textContent = specimen.puzzle ? `Assemble ${specimen.name[0] + specimen.name.slice(1).toLowerCase()}` : 'Assemble model';
   const request = ++loadRequest;
@@ -708,6 +842,7 @@ function failedLoad(error, file) {
 
 function setModel(type) {
   if (puzzleActive) exitPuzzle();
+  if (lifeSceneActive) exitLifeScene(false);
   activeModel = type;
   const overlay = overlayToggle.checked;
   wrappers.skin.visible = type === 'skin';
@@ -751,6 +886,7 @@ function shareDinosaurLab(channel) {
   if (channel === 'instagram') popup('https://www.instagram.com/');
 }
 document.querySelectorAll('[data-share]').forEach((button) => button.addEventListener('click', () => shareDinosaurLab(button.dataset.share)));
+toggleLifeSceneButton.addEventListener('click', () => { if (lifeSceneActive) exitLifeScene(); else enterLifeScene(); });
 overlayToggle.addEventListener('change', () => setModel(activeModel));
 scaleControl.addEventListener('input', applyModelScale);
 axisScaleControls.forEach((control) => control.addEventListener('input', applyModelScale));
@@ -765,7 +901,7 @@ renderer.domElement.addEventListener('pointermove', onPuzzlePointerMove);
 renderer.domElement.addEventListener('pointerup', onPuzzlePointerUp);
 renderer.domElement.addEventListener('pointercancel', onPuzzlePointerUp);
 
-function resetView() { if (assets[activeModel]) frameModel(assets[activeModel]); }
+function resetView() { if (lifeSceneActive) frameModel(lifeSceneGroup); else if (assets[activeModel]) frameModel(assets[activeModel]); }
 document.querySelector('#resetView').addEventListener('click', resetView);
 document.querySelector('#focusModel').addEventListener('click', resetView);
 document.querySelector('#toggleGrid').addEventListener('click', (event) => { grid.material.opacity = grid.material.opacity ? 0 : 0.32; event.currentTarget.classList.toggle('active', Boolean(grid.material.opacity)); });
@@ -775,6 +911,7 @@ function resize() { const { clientWidth: width, clientHeight: height } = viewer;
 new ResizeObserver(resize).observe(viewer); window.addEventListener('resize', resize); resize();
 function animate() {
   requestAnimationFrame(animate);
+  animateLifeScene(lifeClock.getElapsedTime());
   controls.update();
   renderer.render(scene, camera);
 }
